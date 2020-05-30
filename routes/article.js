@@ -1,7 +1,8 @@
 
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getarticles, postarticles, deletearticlesid } = require('../controllers/article');
+const { getarticles, postarticles, deleteArticlesId } = require('../controllers/article');
+Joi.objectId = require('joi-objectid')(Joi);
 
 router.get('/articles', getarticles);// здесь не стал реализовывать схему, так как ничего не передаем
 router.post('/articles', celebrate({
@@ -17,7 +18,7 @@ router.post('/articles', celebrate({
 }), postarticles);
 router.delete('/articles/:id', celebrate({
   params: Joi.object().keys({
-    id: Joi.string().alphanum().length(24),
+    id: Joi.objectId(),
   }),
-}), deletearticlesid);
+}), deleteArticlesId);
 module.exports = router;

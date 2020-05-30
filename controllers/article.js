@@ -20,10 +20,9 @@ module.exports.postarticles = (req, res, next) => {
     .then((article) => res.send({ data: article }))
     .catch(next);
 };
-module.exports.deletearticlesid = (req, res, next) => {
+module.exports.deleteArticlesId = (req, res, next) => {
   articles.findById(req.params.id)
     .then((article) => {
-      // console.log(article);
       if (article == null) return next(new EntryNotFound('Данная запись не найдена'));
       if (article.owner === req.user._id) {
         res.send({ data: article });

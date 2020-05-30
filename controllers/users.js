@@ -2,9 +2,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const users = require('../models/users');
+const { ConflictingRequest } = require('../errors/ConflictingRequest');
 
 module.exports.getusers = (req, res, next) => {
-  users.findById(req.user)
+  users.findById(req.user._id)
     .then((user) => res.send({ data: { name: user.name, email: user.email } }))
     .catch(next);
 };
@@ -21,7 +22,10 @@ module.exports.postusers = (req, res, next) => {
         _id: card._id, name: card.name, email: card.email,
       },
     }))
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) return next(new ConflictingRequest('Данная учетная запись не была создана, так как введенная почта уже занята другим аккаунтом'));
+      return next(err);
+    });
 };
 
 module.exports.login = (req, res, next) => {
