@@ -7,7 +7,7 @@ const { AuthorizationError } = require('../errors/AuthorizationError');
 const extractBearerToken = (header) => header.replace('Bearer ', '');
 
 module.exports = (req, res, next) => {
-  const { authorization } = req.cookies;
+  const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return next(new AuthorizationError('Необходима авторизация!'));
   }
