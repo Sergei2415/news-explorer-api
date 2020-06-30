@@ -26,6 +26,13 @@ mongoose.connect(BASE_ADDRESS, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+
+  next();
+});
 app.use(rateLimit);
 app.use(helmet());
 app.use(requestLogger);
