@@ -7,6 +7,7 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const routers = require('./routes/index');
+const cors = require('cors')
 
 const rateLimit = require('./middlewares/RateLimit');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -26,13 +27,7 @@ mongoose.connect(BASE_ADDRESS, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-
-  next();
-});
+app.use(cors())
 app.use(rateLimit);
 app.use(helmet());
 app.use(requestLogger);
